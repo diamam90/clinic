@@ -1,7 +1,6 @@
-version: '3'
 services:
   broker1:
-    image: confluentinc/cp-kafka:7.5.0
+    image: confluentinc/cp-kafka:7.5.3
     container_name: br1
     ports:
       - 9092:9092
@@ -16,7 +15,7 @@ services:
       - zookeeper
 
   broker2:
-    image: confluentinc/cp-kafka:7.5.0
+    image: confluentinc/cp-kafka:7.5.3
     container_name: br2
     ports:
       - 9093:9092
@@ -31,7 +30,7 @@ services:
       - zookeeper
 
   broker3:
-    image: confluentinc/cp-kafka:7.5.0
+    image: confluentinc/cp-kafka:7.5.3
     container_name: br3
     ports:
       - 9094:9092
@@ -51,3 +50,25 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+
+  mongo:
+    image: mongo
+    container_name: mongo-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: clinic
+    ports:
+      - 27017:27017
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: clinic
+    ports:
+      - 5432:5432

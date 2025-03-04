@@ -1,0 +1,20 @@
+package com.diamam.doctorservice.model;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record DoctorResponse(
+        @Schema(description = "Идентификатор доктора")
+        String id,
+        @Schema(description = "Имя")
+        String firstName,
+        @Schema(description = "Фамилия")
+        String lastName,
+        @Schema(description = "Отчество")
+        String middleName,
+        @Schema(description = "Специальность")
+        String speciality,
+        @Schema(description = "Должность")
+        String title,
+        @Schema(description = "Описание")
+        String description) {
+}
