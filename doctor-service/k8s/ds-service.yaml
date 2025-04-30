@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: doctor-service-service
+  namespace: clinic
+  labels:
+    app: doctor-service
+    tier: backend
+spec:
+  selector:
+    app: doctor-service
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  type: NodePort

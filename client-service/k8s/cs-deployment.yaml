@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-service-deployment
+  namespace: clinic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-service
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: client-service
+        tier: backend
+    spec:
+      containers:
+        - name: client-service
+          image: ooandioo/client-service:0.0.2
+          env:
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: SERVER_PORT
+                  name: client-service-config-map
+            - name: SPRING_DATA_MONGODB_URI
+              value: "mongodb://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@${MONGO_DB_HOST}:${MONGO_DB_PORT}/${MONGO_DB_NAME}"
+            - name: MONGO_DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: MONGO_DB_HOST
+                  name: client-service-config-map
+            - name: MONGO_DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: MONGO_DB_PORT
+                  name: client-service-config-map
+            - name: MONGO_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: MONGO_DB_NAME
+                  name: client-service-config-map
+            - name: MONGO_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_DB_USER
+                  name: client-service-secret
+            - name: MONGO_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_DB_PASSWORD
+                  name: client-service-secret

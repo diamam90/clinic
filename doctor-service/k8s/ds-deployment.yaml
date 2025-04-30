@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: doctor-service-deployment
+  namespace: clinic
+  labels:
+    app: doctor-service
+    tier: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: doctor-service
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: doctor-service
+        tier: backend
+    spec:
+      containers:
+        - name: doctor-service
+          image: ooandioo/doctor-service:0.0.2
+          env:
+              - name: SERVER_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    key: SERVER_PORT
+                    name: doctor-service-config-map
+              - name: SPRING_DATA_MONGODB_URI
+                value: "mongodb://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@${MONGO_DB_HOST}:${MONGO_DB_PORT}/${MONGO_DB_NAME}"
+              - name: MONGO_DB_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    key: MONGO_DB_HOST
+                    name: doctor-service-config-map
+              - name: MONGO_DB_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    key: MONGO_DB_PORT
+                    name: doctor-service-config-map
+              - name: MONGO_DB_NAME
+                valueFrom:
+                  configMapKeyRef:
+                    key: MONGO_DB_NAME
+                    name: doctor-service-config-map
+              - name: MONGO_DB_USER
+                valueFrom:
+                  secretKeyRef:
+                    key: MONGO_DB_USER
+                    name: doctor-service-secret
+              - name: MONGO_DB_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: MONGO_DB_PASSWORD
+                    name: doctor-service-secret

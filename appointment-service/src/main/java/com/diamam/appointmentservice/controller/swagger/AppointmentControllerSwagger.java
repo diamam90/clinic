@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,7 +24,7 @@ public interface AppointmentControllerSwagger {
             @ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = AppointmentResponse.class))),
             @ApiResponse(responseCode = "400")
     })
-    AppointmentResponse create(CreateAppointmentRequest request);
+    AppointmentResponse create(@RequestBody CreateAppointmentRequest request);
 
     @Operation(description = "Поиск приема по идентификатору", method = "GET", parameters = @Parameter(in = ParameterIn.PATH))
     @ApiResponses({

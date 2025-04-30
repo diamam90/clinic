@@ -30,8 +30,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public AppointmentEntity update(UpdateAppointmentRequest request) {
-        AppointmentEntity appointment = appointmentRepository.findById(request.id()).orElseThrow();
+    public AppointmentEntity update(Long appointmentId, UpdateAppointmentRequest request) {
+        AppointmentEntity appointment = appointmentRepository.findById(appointmentId).orElseThrow();
         appointment.setClientId(request.clientId());
         appointment.setDoctorId(request.doctorId());
         return appointment;

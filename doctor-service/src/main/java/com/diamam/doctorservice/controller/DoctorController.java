@@ -7,7 +7,6 @@ import com.diamam.doctorservice.model.DoctorResponse;
 import com.diamam.doctorservice.model.PatchDoctorRequest;
 import com.diamam.doctorservice.model.UpdateDoctorRequest;
 import com.diamam.doctorservice.service.DoctorService;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping;
@@ -49,7 +48,7 @@ public class DoctorController implements DoctorControllerSwagger {
     }
 
     @GetMapping("/find")
-    public List<DoctorResponse> findBySpeciality(@PathParam(value = "speciality") String speciality) {
+    public List<DoctorResponse> findBySpeciality(@RequestParam(value = "speciality") String speciality) {
         return doctorService.findBySpeciality(speciality).stream().map(doctorMapper::toDto).toList();
     }
 }

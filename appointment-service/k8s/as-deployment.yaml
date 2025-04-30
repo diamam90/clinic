@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appointment-service-deployment
+  namespace: clinic
+  labels:
+    app: appointment-service
+    tier: backend
+spec:
+  selector:
+    matchLabels:
+      app: appointment-service
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      name: appointment-service
+      namespace: clinic
+      labels:
+        app: appointment-service
+        tier: backend
+    spec:
+      containers:
+        - name: appointment-service
+          image: ooandioo/appointment-service:0.0.2
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://${PG_HOST}:${PG_PORT}/${PG_DB_NAME}"
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: appointment-service-secret
+                  key: PG_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: appointment-service-secret
+                  key: PG_PASS
+          envFrom:
+            - configMapRef:
+                name: appointment-service-config-map

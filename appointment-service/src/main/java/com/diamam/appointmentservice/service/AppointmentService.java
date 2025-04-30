@@ -11,7 +11,7 @@ public interface AppointmentService {
 
     AppointmentEntity save(CreateAppointmentRequest request);
 
-    AppointmentEntity update(UpdateAppointmentRequest request);
+    AppointmentEntity update(Long appointmentId, UpdateAppointmentRequest request);
 
     AppointmentEntity findById(Long appointmentId);
 
