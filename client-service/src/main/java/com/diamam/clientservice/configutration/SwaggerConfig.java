@@ -1,5 +1,6 @@
-package com.diamam.appointmentservice.configuration;
+package com.diamam.clientservice.configutration;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Schema;
@@ -13,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Configuration
+@OpenAPIDefinition
 public class SwaggerConfig {
 
     static {
@@ -25,6 +27,6 @@ public class SwaggerConfig {
     public OpenAPI openApi(){
         return new OpenAPI()
                 .servers(List.of(new Server().url("/")))
-                .info(new Info().title("Appointment Service API").version("0.0.1"));
+                .info(new Info().title("Client Service API").version("0.0.1"));
     }
 }

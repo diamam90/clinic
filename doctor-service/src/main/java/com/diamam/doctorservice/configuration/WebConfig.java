@@ -1,4 +1,4 @@
-package com.diamam.doctorservice.config;
+package com.diamam.doctorservice.configuration;
 
 import com.diamam.doctorservice.interceptor.LoggingRequestInterceptor;
 import com.diamam.doctorservice.interceptor.TraceIdRequestInterceptor;

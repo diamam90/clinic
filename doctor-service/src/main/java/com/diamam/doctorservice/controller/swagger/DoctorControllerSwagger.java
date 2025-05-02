@@ -20,13 +20,6 @@ import java.util.List;
 @Tag(name = "Операции над докторами")
 public interface DoctorControllerSwagger {
 
-    @Operation(summary = "Поиск доктора по идентификатору", method = "GET",
-            parameters = @Parameter(name = "doctorId", in = ParameterIn.PATH, required = true))
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = DoctorResponse.class))),
-            @ApiResponse(responseCode = "400")})
-    DoctorResponse getById(String doctorId);
-
     @Operation(summary = "Создание доктора", method = "POST")
     @ApiResponses({
             @ApiResponse(responseCode = "201", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = DoctorResponse.class))),
@@ -53,6 +46,13 @@ public interface DoctorControllerSwagger {
             @ApiResponse(responseCode = "204"),
             @ApiResponse(responseCode = "400")})
     void delete(String id);
+
+    @Operation(summary = "Поиск доктора по идентификатору", method = "GET",
+            parameters = @Parameter(name = "doctorId", in = ParameterIn.PATH, required = true))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = DoctorResponse.class))),
+            @ApiResponse(responseCode = "400")})
+    DoctorResponse getById(String doctorId);
 
     @Operation(summary = "Поиск докторов по специальности", method = "GET", parameters = @Parameter(in = ParameterIn.QUERY, name = "speciality"))
     @ApiResponses({

@@ -17,14 +17,6 @@ import org.springframework.http.MediaType;
 @Tag(name = "Операции над пользователями")
 public interface ClientControllerSwagger {
 
-    @Operation(summary = "Поиск клиента по идентификатору", method = "GET",
-            parameters = {@Parameter(name = "Идентификатор клиента", in = ParameterIn.PATH, required = true,
-                    schema = @Schema(implementation = String.class))},
-            responses = {
-                    @ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ClientResponse.class))),
-                    @ApiResponse(responseCode = "400")})
-    ClientResponse getById(String clientId);
-
     @Operation(summary = "Создание клиента", method = "POST")
     @ApiResponses({
             @ApiResponse(responseCode = "201", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ClientResponse.class))),
@@ -55,4 +47,12 @@ public interface ClientControllerSwagger {
             @ApiResponse(responseCode = "204"),
             @ApiResponse(responseCode = "400")})
     void delete(String clientId);
+
+    @Operation(summary = "Поиск клиента по идентификатору", method = "GET",
+            parameters = {@Parameter(name = "Идентификатор клиента", in = ParameterIn.PATH, required = true,
+                    schema = @Schema(implementation = String.class))},
+            responses = {
+                    @ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ClientResponse.class))),
+                    @ApiResponse(responseCode = "400")})
+    ClientResponse getById(String clientId);
 }

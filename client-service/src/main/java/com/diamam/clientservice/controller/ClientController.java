@@ -16,13 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/clients")
 @RequiredArgsConstructor
 public class ClientController implements ClientControllerSwagger {
+
     private final ClientService clientService;
     private final ClientMapper clientMapper;
-
-    @GetMapping()
-    public ClientResponse getById(@RequestParam(name = "clientId") String clientId) {
-        return clientMapper.toDto(clientService.getById(clientId));
-    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,5 +40,10 @@ public class ClientController implements ClientControllerSwagger {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String clientId) {
         clientService.delete(clientId);
+    }
+
+    @GetMapping("/{clientId}")
+    public ClientResponse getById(@PathVariable String clientId) {
+        return clientMapper.toDto(clientService.getById(clientId));
     }
 }

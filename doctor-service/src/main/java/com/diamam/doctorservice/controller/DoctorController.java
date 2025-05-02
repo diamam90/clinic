@@ -9,7 +9,6 @@ import com.diamam.doctorservice.model.UpdateDoctorRequest;
 import com.diamam.doctorservice.service.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping;
 
 import java.util.List;
 
@@ -19,13 +18,6 @@ import java.util.List;
 public class DoctorController implements DoctorControllerSwagger {
     private final DoctorService doctorService;
     private final DoctorMapper doctorMapper;
-
-    private final BeanNameUrlHandlerMapping beanNameHandlerMapping;
-
-    @GetMapping()
-    public DoctorResponse getById(@RequestParam(name = "doctorId") String doctorId) {
-        return doctorMapper.toDto(doctorService.findById(doctorId));
-    }
 
     @PostMapping
     public DoctorResponse create(@RequestBody CreateDoctorRequest request) {
@@ -45,6 +37,11 @@ public class DoctorController implements DoctorControllerSwagger {
     @DeleteMapping("/{doctorId}")
     public void delete(@PathVariable String doctorId) {
         doctorService.deleteById(doctorId);
+    }
+
+    @GetMapping("/{doctorId}")
+    public DoctorResponse getById(@PathVariable String doctorId) {
+        return doctorMapper.toDto(doctorService.findById(doctorId));
     }
 
     @GetMapping("/find")

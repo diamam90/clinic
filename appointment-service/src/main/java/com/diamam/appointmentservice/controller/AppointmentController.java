@@ -20,36 +20,31 @@ public class AppointmentController implements AppointmentControllerSwagger {
     private final AppointmentService appointmentService;
     private final AppointmentMapper mapper;
 
-    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AppointmentResponse create(@RequestBody CreateAppointmentRequest request) {
         return mapper.toDto(appointmentService.save(request));
     }
 
-    @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{appointmentId}")
+    public Long cancel(@PathVariable(name = "appointmentId") Long appointmentId) {
+        return appointmentService.cancel(appointmentId);
+    }
+
     @GetMapping("/{appointmentId}")
     public AppointmentResponse findById(@PathVariable(name = "appointmentId") Long appointmentId) {
         return mapper.toDto(appointmentService.findById(appointmentId));
     }
 
-    @Override
     @GetMapping("/doctor")
     public List<AppointmentResponse> findByDoctorIdAndDate(@RequestParam(name = "doctorId") String doctorId,
                                                            @RequestParam(name = "date") LocalDate date) {
         return appointmentService.findByDoctorIdAndDate(doctorId, date).stream().map(mapper::toDto).toList();
     }
 
-    @Override
     @GetMapping("/client")
     public List<AppointmentResponse> findByClientId(@RequestParam(name = "clientId") String clientId) {
         return appointmentService.findByClientId(clientId).stream().map(mapper::toDto).toList();
-    }
-
-    @Override
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{appointmentId}")
-    public Long cancel(@PathVariable(name = "appointmentId") Long appointmentId) {
-        return appointmentService.cancel(appointmentId);
     }
 }

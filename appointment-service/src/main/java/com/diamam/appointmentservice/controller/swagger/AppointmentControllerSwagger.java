@@ -26,6 +26,14 @@ public interface AppointmentControllerSwagger {
     })
     AppointmentResponse create(@RequestBody CreateAppointmentRequest request);
 
+    @Operation(description = "Отмена приема по идентификатору", method = "DELETE",
+            parameters = @Parameter(name = "appointmentId", in = ParameterIn.PATH))
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class))),
+            @ApiResponse(responseCode = "400")
+    })
+    Long cancel(Long appointmentId);
+
     @Operation(description = "Поиск приема по идентификатору", method = "GET", parameters = @Parameter(in = ParameterIn.PATH))
     @ApiResponses({
             @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = AppointmentResponse.class))),
@@ -49,12 +57,4 @@ public interface AppointmentControllerSwagger {
             @ApiResponse(responseCode = "400")
     })
     List<AppointmentResponse> findByClientId(String clientId);
-
-    @Operation(description = "Отмена приема по идентификатору", method = "DELETE",
-            parameters = @Parameter(name = "appointmentId", in = ParameterIn.PATH))
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Long.class))),
-            @ApiResponse(responseCode = "400")
-    })
-    Long cancel(Long appointmentId);
 }
