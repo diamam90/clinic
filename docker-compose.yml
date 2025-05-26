@@ -23,7 +23,8 @@ services:
     ports:
       - 9000:8080
     depends_on:
-      - kafka
+      kafka:
+        condition: service_started
     environment:
       DYNAMIC_CONFIG_ENABLED: true
       KAFKA_CLUSTERS_0_NAME: kafka_test
@@ -42,7 +43,7 @@ services:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
   postgres:
-    image: postgres:17.4
+    image: postgres:16.8
     container_name: postgres
     environment:
       POSTGRES_USER: admin

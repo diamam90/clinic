@@ -6,11 +6,24 @@ spring:
     url: jdbc:postgresql://localhost:5432/clinic
     username: admin
     password: admin
+
   jpa:
+    properties:
+      hibernate:
+        format_sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     show-sql: true
 
+  flyway:
+    url: jdbc:postgresql://localhost:5432/clinic
+    user: admin
+    password: admin
+
+logging:
+  level:
+    org.Hibernate.SQL: debug
+    org.flywaydb: trace
 springdoc:
   api-docs:
     enabled: true
