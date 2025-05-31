@@ -1,7 +1,6 @@
 server:
   port: 8080
 
-
 spring:
   cloud:
     gateway:
@@ -36,3 +35,9 @@ springdoc:
         url: /doctor-service/v3/api-docs
       - name: appointment-service
         url: /appointment-service/v3/api-docs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
