@@ -9,14 +9,20 @@ spring:
           uri: http://localhost:8081
           predicates:
             - Path=/client-service/**
+          filters:
+            - RewritePath=/client-service/?(?<segment>.*), /$\{segment}
         - id: doctor
           uri: http://localhost:8082
           predicates:
             - Path=/doctor-service/**
+          filters:
+            - RewritePath=/doctor-service/?(?<segment>.*), /$\{segment}
         - id: appointment
           uri: http://localhost:8083
           predicates:
             - Path=/appointment-service/**
+          filters:
+            - RewritePath=/appointment-service/?(?<segment>.*), /$\{segment}
 
 springdoc:
   api-docs:
@@ -37,7 +43,6 @@ springdoc:
         url: /appointment-service/v3/api-docs
 
 management:
-  endpoints:
-    web:
-      exposure:
-        include: health, prometheus
+  tracing:
+    sampling:
+      probability: 1.0

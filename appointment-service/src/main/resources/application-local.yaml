@@ -20,16 +20,7 @@ spring:
     user: admin
     password: admin
 
-springdoc:
-  api-docs:
-    enabled: true
-    path: /appointment-service/v3/api-docs
-  swagger-ui:
-    enabled: true
-    path: /swagger-ui.html
-
 management:
-  endpoints:
-    web:
-      exposure:
-        include: health, prometheus
+  tracing:
+    sampling:
+      probability: 1.0
