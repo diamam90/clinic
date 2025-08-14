@@ -1,23 +1,25 @@
 package com.diamam.appointmentservice.service;
 
+import com.diamam.appointmentservice.dto.appointment.AppointmentFilter;
 import com.diamam.appointmentservice.entity.AppointmentEntity;
-import com.diamam.appointmentservice.model.CreateAppointmentRequest;
-import com.diamam.appointmentservice.model.UpdateAppointmentRequest;
+import com.diamam.appointmentservice.dto.appointment.ReserveRequest;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface AppointmentService {
 
-    AppointmentEntity save(CreateAppointmentRequest request);
+    AppointmentEntity reserve(Long appointmentId, ReserveRequest request);
 
-    AppointmentEntity update(Long appointmentId, UpdateAppointmentRequest request);
+    AppointmentEntity cancel(Long appointmentId);
 
     AppointmentEntity findById(Long appointmentId);
 
-    List<AppointmentEntity> findByDoctorIdAndDate(String doctorId, LocalDate date);
+    List<AppointmentEntity> find(AppointmentFilter filter);
+
+    List<AppointmentEntity> findByDoctorIdAndDateBetween(String doctorId, LocalDate start, LocalDate end);
 
     List<AppointmentEntity> findByClientId(String clientId);
 
-    Long cancel(Long appointmentId);
+
 }

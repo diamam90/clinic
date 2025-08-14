@@ -41,6 +41,24 @@ services:
       - 27017:27017
     volumes:
       - ./init-mongo.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - mongo-data:/data/db
+
+  mongo-express:
+    image: mongo-express:1.0.2-20-alpine3.19
+    container_name: mongo-ex
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo-db
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: false
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_AUTH_USERNAME: user1
+      ME_CONFIG_MONGODB_AUTH_PASSWORD: 34525
+      ME_CONFIG_MONGODB_AUTH_DATABASE: clinic
+    ports:
+      - 27018:8081
+    depends_on:
+      - mongo
 
   postgres:
     image: postgres:16.8
@@ -51,3 +69,19 @@ services:
       POSTGRES_DB: clinic
     ports:
       - 5432:5432
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:9.6.0
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 80
+      PGADMIN_DEFAULT_EMAIL: admin@admin.ru
+    ports:
+      - 5433:80
+
+volumes:
+  pg-data:
+  mongo-data:

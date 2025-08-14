@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public interface DoctorMapper {
 
     @Mapping(target = "createdAt", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "updatedAt", expression = "java(LocalDateTime.now())")
     DoctorEntity fromCreateRequest(CreateDoctorRequest request);
 
     DoctorResponse toDto(DoctorEntity entity);

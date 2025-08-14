@@ -1,4 +1,4 @@
-package com.diamam.appointmentservice.model;
+package com.diamam.appointmentservice.dto.appointment;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -11,7 +11,7 @@ public record CreateAppointmentRequest(
         @Schema(description = "Идентификатор клиента")
         String clientId,
 
-        @Schema(description = "Идентификатор доктора")
+        @Schema(description = "Идентификатор доктора", requiredMode = Schema.RequiredMode.REQUIRED)
         String doctorId,
 
         @Schema(description = "Начало приема")
@@ -20,7 +20,7 @@ public record CreateAppointmentRequest(
         @Schema(description = "Окончание приема")
         LocalTime end,
 
-        @Schema(description = "Дата приема")
+        @Schema(description = "Дата приема", requiredMode = Schema.RequiredMode.REQUIRED)
         LocalDate date
 ) {
 }

@@ -8,10 +8,12 @@ import com.diamam.doctorservice.model.UpdateDoctorRequest;
 import com.diamam.doctorservice.repository.DoctorRepository;
 import com.diamam.doctorservice.service.DoctorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -64,5 +66,15 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public void deleteById(String id) {
         doctorRepository.deleteById(id);
+    }
+
+    @Override
+    public List<DoctorEntity> findByLastUpdatedAndLimit(LocalDateTime lastUpdated, Integer limit) {
+        var queryLimit = Limit.of(limit+1);
+        if (Objects.isNull(lastUpdated)){
+            return doctorRepository.findAll(queryLimit);
+        } else {
+            return doctorRepository.findByLastUpdated(lastUpdated, queryLimit);
+        }
     }
 }

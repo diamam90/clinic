@@ -1,4 +1,4 @@
-package com.diamam.appointmentservice.model;
+package com.diamam.appointmentservice.dto.appointment;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

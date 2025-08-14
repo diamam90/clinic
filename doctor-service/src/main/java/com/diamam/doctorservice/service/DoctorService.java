@@ -5,6 +5,7 @@ import com.diamam.doctorservice.model.CreateDoctorRequest;
 import com.diamam.doctorservice.model.PatchDoctorRequest;
 import com.diamam.doctorservice.model.UpdateDoctorRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface DoctorService {
@@ -19,5 +20,7 @@ public interface DoctorService {
     List<DoctorEntity> findBySpeciality(String speciality);
 
     void deleteById(String id);
+
+    List<DoctorEntity> findByLastUpdatedAndLimit(LocalDateTime lastUpdated, Integer limit);
 
 }
