@@ -2,6 +2,7 @@ package com.diamam.appointmentservice.dto.appointment;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -14,6 +15,7 @@ import java.util.Objects;
 @Schema(description = "Запрос на создание расписания врача на заданное количество дней")
 public record GenerateRequest(
 
+        @NotBlank(message = "doctorId must not be blank")
         @Schema(description = "Идентификатор врача", requiredMode = Schema.RequiredMode.REQUIRED)
         String doctorId,
 

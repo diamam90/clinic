@@ -7,6 +7,8 @@ import com.diamam.appointmentservice.dto.appointment.ReserveRequest;
 import com.diamam.appointmentservice.mapper.AppointmentMapper;
 import com.diamam.appointmentservice.service.AppointmentService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import one.util.streamex.StreamEx;
 import org.springframework.http.HttpStatus;
@@ -23,22 +25,20 @@ public class AppointmentController implements AppointmentControllerSwagger {
     private final AppointmentMapper appointmentMapper;
 
     @PostMapping("/{appointmentId}/reservation")
-    @ResponseStatus(HttpStatus.CREATED)
-    public AppointmentResponse reserve(
-            @PathVariable(name = "appointmentId") Long appointmentId,
-            @Valid
-            @RequestBody ReserveRequest request) {
+    @ResponseStatus(HttpStatus.OK)
+    public AppointmentResponse reserve(@PathVariable(name = "appointmentId") @Positive Long appointmentId,
+            @RequestBody @Valid ReserveRequest request) {
         return appointmentMapper.toDto(appointmentService.reserve(appointmentId, request));
     }
 
     @PostMapping("/{appointmentId}/cancelling")
     @ResponseStatus(HttpStatus.OK)
-    public AppointmentResponse cancel(@PathVariable(name = "appointmentId") Long appointmentId) {
+    public AppointmentResponse cancel(@PathVariable(name = "appointmentId") @Positive Long appointmentId) {
         return appointmentMapper.toDto(appointmentService.cancel(appointmentId));
     }
 
     @GetMapping("/{appointmentId}")
-    public AppointmentResponse findById(@PathVariable(name = "appointmentId") Long appointmentId) {
+    public AppointmentResponse findById(@PathVariable(name = "appointmentId") @Positive Long appointmentId) {
         return appointmentMapper.toDto(appointmentService.findById(appointmentId));
     }
 

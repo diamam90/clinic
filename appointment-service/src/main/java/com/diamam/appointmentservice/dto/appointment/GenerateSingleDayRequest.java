@@ -14,7 +14,6 @@ import java.util.Objects;
 @Schema(description = "Запрос на создание расписание врача")
 public record GenerateSingleDayRequest(
 
-        @NotNull(message = "doctorId must not be null")
         @NotBlank(message = "doctorId must not be blank")
         @Schema(description = "Идентификатор врача", requiredMode = Schema.RequiredMode.REQUIRED)
         String doctorId,

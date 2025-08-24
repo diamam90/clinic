@@ -15,9 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -35,13 +33,11 @@ public class GenerateAppointmentServiceImpl implements GenerateAppointmentServic
     @Override
     public Map<LocalDate, List<AppointmentEntity>> generateByDoctorIdAndDaysCount(GenerateRequest request) {
 
-        validateTimeShift(request.shiftStart(), request.shiftEnd());
+        validateTimeShift(request.shiftStart(), request.shiftEnd(), request.duration());
         validateDate(request);
 
-        var appointmentsPerShift = Duration.between(request.shiftStart(), request.shiftEnd())
-                .dividedBy(request.duration());
+        var appointments = new ArrayList<AppointmentEntity>();
 
-        var appointments = new ArrayList<AppointmentEntity>((int) (appointmentsPerShift * request.days()));
         for (int i = 0; i < request.days(); i++) {
             var currentDate = request.dateStart().plusDays(i);
             var currentDateAppointments = generateForDay(
@@ -55,13 +51,13 @@ public class GenerateAppointmentServiceImpl implements GenerateAppointmentServic
         }
 
         var savedAppointments = appointmentRepository.saveAll(appointments);
-        return StreamEx.of(savedAppointments).groupingBy(AppointmentEntity::getDate);
+        return StreamEx.of(savedAppointments).sorted(appointmentComparator()).groupingBy(AppointmentEntity::getDate);
     }
 
     @Override
     public List<AppointmentEntity> generateByDoctorId(GenerateSingleDayRequest request) {
 
-        validateTimeShift(request.shiftStart(), request.shiftEnd());
+        validateTimeShift(request.shiftStart(), request.shiftEnd(), request.duration());
         validateDate(request);
 
         var generatedAppointments = generateForDay(
@@ -80,12 +76,25 @@ public class GenerateAppointmentServiceImpl implements GenerateAppointmentServic
      *
      * @param shiftStart начало смены врача
      * @param shiftEnd   окончание смены врача
+     * @param duration   длительность приема
      */
-    private void validateTimeShift(LocalTime shiftStart, LocalTime shiftEnd) {
-        if (shiftStart.isBefore(workingDayStart) || shiftEnd.isAfter(workingDayEnd)) {
+    private void validateTimeShift(LocalTime shiftStart, LocalTime shiftEnd, Duration duration) {
+        if (!shiftTimeIsBetweenWorkingDay(shiftStart, shiftEnd) ||
+                durationBetweenStartAndEndIsLessThanDuration(shiftStart, shiftEnd, duration)) {
             throw new BadRequestException("ShiftStart and shiftEnd must be between %s and %s"
                     .formatted(workingDayStart, workingDayEnd));
         }
+    }
+
+
+    private boolean shiftTimeIsBetweenWorkingDay(LocalTime shiftStart, LocalTime shiftEnd) {
+        return shiftStart.isBefore(shiftEnd) &&
+                !shiftStart.isBefore(workingDayStart) &&
+                !shiftEnd.isAfter(workingDayEnd);
+    }
+
+    private boolean durationBetweenStartAndEndIsLessThanDuration(LocalTime shiftStart, LocalTime shiftEnd, Duration duration) {
+        return Duration.between(shiftStart, shiftEnd).compareTo(duration) < 0;
     }
 
     /**
@@ -96,12 +105,12 @@ public class GenerateAppointmentServiceImpl implements GenerateAppointmentServic
     private void validateDate(GenerateRequest request) {
         var endDate = request.dateStart().plusDays(request.days());
 
-        if (appointmentRepository.existReservedByDoctorAndDateBetween(
+        if (appointmentRepository.existByDoctorAndDateBetween(
                 request.doctorId(),
                 request.dateStart(),
-                endDate)
-        ) {
-            throw new BadRequestException("Reserved appointments for doctorId [%s] already exist for period [%s-%s]".
+                endDate
+        )) {
+            throw new BadRequestException("Appointments for doctorId [%s] already exist for period [%s-%s]".
                     formatted(request.doctorId(), request.dateStart(), endDate));
         }
     }
@@ -112,8 +121,8 @@ public class GenerateAppointmentServiceImpl implements GenerateAppointmentServic
      * @param request запрос на создание расписания
      */
     private void validateDate(GenerateSingleDayRequest request) {
-        if (appointmentRepository.existReservedByDoctorAndDate(request.doctorId(), request.date())) {
-            throw new BadRequestException("Reserved appointments for doctorId [%s] already exist for date [%s]".
+        if (appointmentRepository.existByDoctorAndDate(request.doctorId(), request.date())) {
+            throw new BadRequestException("Appointments for doctorId [%s] already exist for date [%s]".
                     formatted(request.doctorId(), request.date()));
         }
     }
@@ -156,5 +165,10 @@ public class GenerateAppointmentServiceImpl implements GenerateAppointmentServic
         }
 
         return appointments;
+    }
+
+    private Comparator<AppointmentEntity> appointmentComparator() {
+        return Comparator.comparing(AppointmentEntity::getDate)
+                .thenComparing(AppointmentEntity::getStart);
     }
 }

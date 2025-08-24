@@ -20,18 +20,17 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
     List<AppointmentEntity> findByDoctorIdAndDateBetween(String doctorId, LocalDate start, LocalDate end);
 
     @Query("""
-                SELECT COUNT(a)>0 FROM AppointmentEntity a
+                SELECT COUNT(a) > 0 FROM AppointmentEntity a
                 WHERE a.doctorId = :doctorId
                     AND a.date = :date
-                    AND a.isAvailable = true
             """)
-    boolean existReservedByDoctorAndDate(String doctorId, LocalDate date);
+    boolean existByDoctorAndDate(String doctorId, LocalDate date);
 
     @Query("""
-                SELECT COUNT(a)>0 FROM AppointmentEntity a
+                SELECT COUNT(a) > 0 FROM AppointmentEntity a
                 WHERE a.doctorId = :doctorId
                     AND a.date BETWEEN :start AND :end
-                    AND a.isAvailable = true
+                    AND a.isAvailable = false
             """)
-    boolean existReservedByDoctorAndDateBetween(String doctorId, LocalDate start, LocalDate end);
+    boolean existByDoctorAndDateBetween(String doctorId, LocalDate start, LocalDate end);
 }

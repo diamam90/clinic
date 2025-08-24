@@ -42,7 +42,7 @@ class ClientControllerTest {
         @Test
         void shouldReturnClientById() throws Exception {
             when(clientService.getById("213dqsd1231")).thenReturn(ivan());
-            mvc.perform(MockMvcRequestBuilders.get("/api/v1/clients?clientId=213dqsd1231"))
+            mvc.perform(MockMvcRequestBuilders.get("/api/v1/clients/213dqsd1231"))
                     .andExpectAll(status().isOk(),
                             content().json(// language=JSON
                                     """
@@ -60,7 +60,7 @@ class ClientControllerTest {
         void getByIdThrowsObjectNotFound() throws Exception {
             when(clientService.getById("213dqsd1231"))
                     .thenThrow(new ObjectNotFoundException("213dqsd1231"));
-            mvc.perform(MockMvcRequestBuilders.get("/api/v1/clients?clientId=213dqsd1231"))
+            mvc.perform(MockMvcRequestBuilders.get("/api/v1/clients/213dqsd1231"))
                     .andExpectAll(status().isNotFound(),
                             content().json(// language=JSON
                                     """
@@ -75,7 +75,7 @@ class ClientControllerTest {
         void shouldReturn404WhenClientByIdNotFound() throws Exception {
             when(clientService.getById("213dqsd1231"))
                     .thenThrow(new ObjectNotFoundException("213dqsd1231"));
-            mvc.perform(MockMvcRequestBuilders.get("/api/v1/clients?clientId=213dqsd1231"))
+            mvc.perform(MockMvcRequestBuilders.get("/api/v1/clients/213dqsd1231"))
                     .andExpectAll(status().isNotFound(),
                             content().json(// language=JSON
                                     """

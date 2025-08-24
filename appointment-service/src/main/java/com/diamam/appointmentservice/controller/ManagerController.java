@@ -8,6 +8,7 @@ import com.diamam.appointmentservice.service.AutoGenerateAppointmentService;
 import com.diamam.appointmentservice.service.GenerateAppointmentService;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import one.util.streamex.EntryStream;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class ManagerController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Map<LocalDate, List<AppointmentResponse>> generateForFewDays(@RequestBody @Valid GenerateRequest request) {
+    public Map<LocalDate, List<AppointmentResponse>> generateForFewDays(@RequestBody @Valid @NotNull GenerateRequest request) {
         var appointments = generateAppointmentService.generateByDoctorIdAndDaysCount(request);
 
         return EntryStream.of(appointments)
@@ -43,7 +44,7 @@ public class ManagerController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/bydate")
-    public List<AppointmentResponse> generateForDate(@RequestBody @Valid GenerateSingleDayRequest request) {
+    public List<AppointmentResponse> generateForDate(@RequestBody @Valid @NotNull GenerateSingleDayRequest request) {
         var appointments = generateAppointmentService.generateByDoctorId(request);
 
         return appointments.stream()
@@ -53,7 +54,7 @@ public class ManagerController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/auto")
-    public void autogenerate(){
+    public void autogenerate() {
         autoGenerateAppointmentService.generateSchedule();
     }
 }
